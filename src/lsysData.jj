@@ -1,0 +1,195 @@
+options {
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = true;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(LsysParser)
+package drawing.parser;
+import java.util.ArrayList;
+
+/**
+cd C:\work\git_tratsi\nals
+C:\devtools\javacc-javacc-7.0.11\scripts\javacc.bat -OUTPUT_DIRECTORY:src\main\java\drawing\parser src\lsysData.jj
+ */
+
+
+public class LsysParser {
+
+ArrayList al = new ArrayList();
+ArrayList rules = new ArrayList();
+
+
+  /** Main entry point. */
+  public static void main(String args[]) throws ParseException {
+    LsysParser parser = new LsysParser(System.in);
+    parser.parse();
+  }
+
+}
+
+PARSER_END(LsysParser)
+
+// white space
+SKIP: {
+        " "
+    |   "\t"
+    |   "\n"
+    |   "\r"
+    |   "\f"
+}
+
+
+// LSYS operators
+TOKEN: {
+        <CHANGECOLOR: "*">
+    |   <MARK: "@">
+    |   <LABEL: "|">
+    |   <PUSH: "[">
+    |   <POP: "]">
+    |   <COMMA: ",">
+    |   <WIDTHINCR: "'">
+    |   <WIDTHDECR: "\"">
+    |   <DOUBLELENGTH: "~">
+    |   <HALFLENGTH: "`">
+    |   <EQUAL: "=">
+    |   <RIGHT: "+">
+    |   <LEFT: "-">
+    |   <HRIGHT: "$">
+    |   <HLEFT: "%">
+}
+
+TOKEN: {
+< STRING_LITERAL:
+      "("
+      (   (~[")","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      ")"
+  >
+}
+
+TOKEN: {
+        <IDENTIFIER: <LETTER> >
+|
+  < #LETTER: ["a"-"z","A"-"Z", "_"] >
+
+}
+
+void parse():
+{
+}
+{
+	ruleList()
+    {
+    }
+}
+
+protected void ruleList():
+{
+	  Token t = null;
+}
+{
+        rule() 
+		{
+		rules.add(al);
+		al = new ArrayList();
+		}
+		( t=<COMMA>
+		rule() 
+		{
+		rules.add(al);
+		al = new ArrayList();
+		}
+		)* 
+
+    {
+    }
+}
+
+protected void rule():
+{
+	  Token t = null;
+}
+{
+        t=<IDENTIFIER> 
+		{
+		al.add( t.image.toUpperCase()) ;
+		}
+		t=<EQUAL>
+		{
+		al.add( t.image) ;
+		}
+		ruleBody()
+}
+
+protected void ruleBody():
+{
+}
+{
+    (  ruleToken()      |   expr()
+
+    {
+    }
+)+
+}
+
+protected void ruleToken():
+{
+	  Token t =  null;
+}
+{
+    (   t=<CHANGECOLOR>
+    |   t=<PUSH>
+    |   t=<POP>
+    |   t=<WIDTHINCR>
+    |   t=<WIDTHDECR>
+    |   t=<DOUBLELENGTH>
+    |   t=<HALFLENGTH>
+    |   t=<RIGHT>
+    |   t=<LEFT>
+    |   t=<HRIGHT>
+    |   t=<HLEFT>
+	|	t=<IDENTIFIER> )
+    {
+		if (t!=null) al.add( t.image.toUpperCase()) ;
+    }
+}
+
+protected void expr():
+{
+	Token t = null;
+	String word = "";
+}
+{
+    (   t=<MARK> 
+	|	t=<LABEL> )
+    {
+		word +=  t.image ;
+    }
+	t=<STRING_LITERAL>   
+    {
+		word +=  t.image.substring(1,t.image.length()-1) ; // minus parens
+		al.add(word);
+    }
+
+}
