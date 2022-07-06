@@ -1,0 +1,4 @@
+To create a jar of dependencies, from this directory do:
+
+mvn clean package shade:shade
+
