@@ -32,6 +32,12 @@ class Generator {
 				ruleFile,galleryPath,size,rulecode, RuleCode.hex2dec(color))
 	}
 
+	def generate(namespace,infile,
+			ruleFile,galleryPath,size,rulecode,String color,author) {
+		generate(namespace,infile,
+				ruleFile,galleryPath,size,rulecode, RuleCode.hex2dec(color),author)
+	}
+
 	/**
 	 * Given RDF/TTL, generate the graphic
 	 * @param namespace, a term for the base of the graph
@@ -53,6 +59,19 @@ class Generator {
 
 		def guid = UUID.randomUUID()
 		new GenConfig().write(ruleFile,ts,namespace,size,rulecode,guid)
+		new DataGraphDriver().driver(ruleFile,galleryPath,0.02,color)
+	}
+
+	def generate(namespace,infile,
+			ruleFile,galleryPath,size,rulecode,List color,author) {
+
+
+		def m = new JenaUtils().loadOntImports(infile)
+		def r = new JenaUtils().findAllRootsList(m)
+		def ts = translate(infile,ruleFile,namespace,r,size)
+
+		def guid = UUID.randomUUID()
+		new GenConfig().write(ruleFile,ts,namespace,size,rulecode,guid,author)
 		new DataGraphDriver().driver(ruleFile,galleryPath,0.02,color)
 	}
 
