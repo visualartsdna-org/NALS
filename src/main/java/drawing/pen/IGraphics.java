@@ -63,4 +63,7 @@ public interface IGraphics {
 
 	// save graphic state to image file
 	void save(OutputStream stream);
+
+	// save graphic state to image file
+	void load(String filename);
 }

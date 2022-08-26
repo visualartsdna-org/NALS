@@ -48,8 +48,8 @@ class GraphicsShim implements IGraphics {
 	def transformScaleY = 1.0
 	def metric = 1.0
 
-	public GraphicsShim(h,w) {
-		g = new Graphics(h,w, Graphics.bgcolor, metric)
+	public GraphicsShim(w,h) {
+		g = new Graphics(w,h, Graphics.bgcolor, metric)
 	}
 
 	public GraphicsShim(color) {
@@ -266,6 +266,11 @@ class GraphicsShim implements IGraphics {
 	public void save(OutputStream stream) {
 		BufferedImage bi = transform()
 		ImageIO.write(bi, "JPEG", stream);
+	}
+
+	@Override
+	public void load(String filename) {
+		g.load(filename)
 	}
 		
 }

@@ -262,4 +262,9 @@ class Graphics implements IGraphics {
 		
 	}
 
+	@Override
+	public void load(String filename) {
+		bi = ImageIO.read(new File(filename));
+	}
+
 }
