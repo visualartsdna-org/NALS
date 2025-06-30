@@ -10,7 +10,7 @@ class TestDriveQuery {
 
 	def queryC = """
 # Watercolors
-prefix vad:	<http://visualartsdna.org/2021/07/16/model#>
+prefix vad:	<http://visualartsdna.org/model/>
 prefix work:	<http://visualartsdna.org/work/> 
 prefix xs: <http://www.w3.org/2001/XMLSchema#> 
 prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -32,7 +32,7 @@ construct {
 	
 	def queryD = """
 # Drawings
-prefix vad:	<http://visualartsdna.org/2021/07/16/model#>
+prefix vad:	<http://visualartsdna.org/model/>
 prefix work:	<http://visualartsdna.org/work/> 
 prefix xs: <http://www.w3.org/2001/XMLSchema#> 
 prefix skos: <http://www.w3.org/2004/02/skos/core#>
