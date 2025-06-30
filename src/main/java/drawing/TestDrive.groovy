@@ -17,7 +17,7 @@ import rdf.JenaUtils
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TestDrive {
 	
-	def base="." // modify as needed
+	def base="C:/test/testDrive" // modify as needed
 	def size = 14000
 
 	
@@ -35,7 +35,7 @@ class TestDrive {
 		def rulecode = "X=E,E=E[+E]E[-E][E]"
 		def color = "EC4124" // vermillion
 
-		new drawing.Generator()
+		new Generator()
 		.generate(namespace,infile,ruleFile,galleryPath,size,rulecode,color)
 	}
 	
